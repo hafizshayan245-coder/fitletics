@@ -233,7 +233,7 @@
           <div class="testi-avatar">MJ</div>
           <div>
             <div class="name">Marcus Johnson</div>
-            <div class="role">Software Engineer</div>
+            <div class="role">Gym Owner</div>
           </div>
         </div>
       </div>
@@ -251,7 +251,7 @@
           <div class="testi-avatar">SC</div>
           <div>
             <div class="name">Sarah Chen</div>
-            <div class="role">Marketing Director</div>
+            <div class="role">Instagram Influencer</div>
           </div>
         </div>
       </div>
@@ -390,8 +390,32 @@ document.addEventListener('DOMContentLoaded', () => {
       run();
     }
   });
-});
-</script>
+
+  // Scroll reveal -- sections and cards "draft in" as they enter view
+  var revealSelectors = [
+    '.section-head', '.feature-card', '.why-item', '.testi-card', '.value-card',
+    '.story-block .stat-col', '.story-block > div:last-child',
+    '.about-hero .wrap > div', '.hero-visual',
+    '.plans-hero .wrap > *', '.video-section .wrap > *',
+    '.cta-band .wrap > *'
+  ];
+  var revealEls = document.querySelectorAll(revealSelectors.join(','));
+  revealEls.forEach(function (el) { el.classList.add('reveal'); });
+
+  if ('IntersectionObserver' in window && revealEls.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+});</script>
 <script src="script.js"></script>
 </body>
 </html>

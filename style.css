@@ -206,7 +206,7 @@ h1,h2,h3,h4{
   -webkit-mask-image: linear-gradient(to bottom, black, black 55%, transparent 100%);
   mask-image: linear-gradient(to bottom, black, black 55%, transparent 100%);
 }
-.hero-v2 .wrap{ max-width: 720px; }
+.hero-v2 .wrap h1{ max-width: 720px; }
 .hero-v2 h1{
   font-size: clamp(34px, 5.6vw, 56px);
   margin: 20px 0 18px;
@@ -595,6 +595,39 @@ footer{
   .pill-badge{ font-size: 12.5px; padding: 7px 13px 7px 11px; }
   .hero-v2 h1{ font-size: 30px; }
   .price{ font-size: 20px; }
+}
+
+/* =========================================================
+   Scroll reveal — elements "draft in" as they enter view
+   ========================================================= */
+.reveal{
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1);
+}
+.reveal.is-visible{
+  opacity: 1;
+  transform: none;
+}
+/* Sequential stagger within a grid — reads as panels being drawn in order */
+.feature-grid > .reveal:nth-child(1),
+.why-grid > .reveal:nth-child(1),
+.testi-grid > .reveal:nth-child(1),
+.values-grid > .reveal:nth-child(1){ transition-delay: 0s; }
+.feature-grid > .reveal:nth-child(2),
+.why-grid > .reveal:nth-child(2),
+.testi-grid > .reveal:nth-child(2),
+.values-grid > .reveal:nth-child(2){ transition-delay: .08s; }
+.feature-grid > .reveal:nth-child(3),
+.why-grid > .reveal:nth-child(3),
+.testi-grid > .reveal:nth-child(3),
+.values-grid > .reveal:nth-child(3){ transition-delay: .16s; }
+.feature-grid > .reveal:nth-child(4),
+.why-grid > .reveal:nth-child(4),
+.values-grid > .reveal:nth-child(4){ transition-delay: .24s; }
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity:1; transform:none; transition:none; }
 }
 
 /* Focus visibility */
