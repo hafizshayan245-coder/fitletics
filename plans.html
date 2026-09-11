@@ -34,17 +34,32 @@
 
 <section class="plans-hero">
   <div class="wrap">
-    <span class="pill-badge"><span class="dot"></span>5 Programs Available</span>
     <h1>Every plan. <span style="color:var(--cyan-deep);">One decision</span> away.</h1>
     <p>Workout programs, e-books, and nutrition guides — built by certified trainers and delivered instantly the moment you check out on Whop.</p>
   </div>
 </section>
 
+<section class="photo-band photo-band-plans">
+  <div class="wrap">
+    <div class="glass-panel liquid-glass on-dark">
+      <h3>Every plan starts with a spec, not a guess.</h3>
+      <p>Sessions, sets, and progression are mapped before a single exercise gets chosen — pick the program below and see it for yourself.</p>
+    </div>
+  </div>
+</section>
+
 <section class="plans-grid-section" style="padding-top:8px;">
   <div class="wrap">
+    <div class="filter-row" id="planFilters">
+      <button class="filter-chip active" data-filter="all">All Plans</button>
+      <button class="filter-chip" data-filter="Strength">Strength</button>
+      <button class="filter-chip" data-filter="Conditioning">Conditioning</button>
+      <button class="filter-chip" data-filter="Nutrition">Nutrition</button>
+      <button class="filter-chip" data-filter="Performance">Performance</button>
+    </div>
     <div class="feature-grid" style="grid-template-columns:repeat(3,1fr);">
 
-      <div class="feature-card">
+      <div class="feature-card" data-category="Strength">
         <div class="feature-card-top">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5 17.5 17.5"/><path d="M4 20 8 8"/><path d="M20 4 16 16"/></svg>
@@ -66,7 +81,7 @@
         </div>
       </div>
 
-      <div class="feature-card">
+      <div class="feature-card" data-category="Conditioning">
         <div class="feature-card-top">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
@@ -88,7 +103,7 @@
         </div>
       </div>
 
-      <div class="feature-card">
+      <div class="feature-card" data-category="Nutrition">
         <div class="feature-card-top">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -114,7 +129,7 @@
 
     <div class="feature-grid feature-grid-pair">
 
-      <div class="feature-card">
+      <div class="feature-card" data-category="Performance">
         <div class="feature-card-top">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
@@ -136,7 +151,7 @@
         </div>
       </div>
 
-      <div class="feature-card">
+      <div class="feature-card" data-category="Nutrition">
         <div class="feature-card-top">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
@@ -185,7 +200,7 @@
 </section>
 
 <section class="cta-band">
-  <div class="wrap">
+  <div class="wrap liquid-glass on-dark">
     <h2>Not sure which plan fits?</h2>
     <p>Start with the Muscle Builder if you're building a base, or Fat Loss Accelerator if that's the goal right now.</p>
     <div class="btn-row">
@@ -261,24 +276,99 @@ document.addEventListener('DOMContentLoaded', () => {
     '.story-block .stat-col', '.story-block > div:last-child',
     '.about-hero .wrap > div', '.hero-visual',
     '.plans-hero .wrap > *', '.video-section .wrap > *',
-    '.cta-band .wrap > *'
+    '.cta-band .wrap > *', '.photo-band .glass-panel'
   ];
-  var revealEls = document.querySelectorAll(revealSelectors.join(','));
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll(revealSelectors.join(',')));
   revealEls.forEach(function (el) { el.classList.add('reveal'); });
 
-  if ('IntersectionObserver' in window && revealEls.length) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
+  if (revealEls.length) {
+    var pending = revealEls.slice();
+    var checkReveal = function () {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      pending = pending.filter(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < vh - 40 && rect.bottom > 0) {
+          el.classList.add('is-visible');
+          return false;
         }
+        return true;
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-    revealEls.forEach(function (el) { io.observe(el); });
-  } else {
-    revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+      if (!pending.length) {
+        window.removeEventListener('scroll', checkReveal);
+        window.removeEventListener('resize', checkReveal);
+      }
+    };
+    checkReveal();
+    window.addEventListener('scroll', checkReveal, { passive: true });
+    window.addEventListener('resize', checkReveal);
+    setTimeout(function () {
+      revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+    }, 2500);
   }
+
+  // Plan filter chips
+  var filterRow = document.getElementById('planFilters');
+  if (filterRow) {
+    var chips = filterRow.querySelectorAll('.filter-chip');
+    var cards = document.querySelectorAll('.feature-card[data-category]');
+    var grids = document.querySelectorAll('.feature-grid');
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        chips.forEach(function (c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        var filter = chip.getAttribute('data-filter');
+        cards.forEach(function (card) {
+          var match = filter === 'all' || card.getAttribute('data-category') === filter;
+          card.classList.toggle('is-hidden', !match);
+        });
+        grids.forEach(function (grid) {
+          var anyVisible = grid.querySelector('.feature-card:not(.is-hidden)');
+          grid.style.display = anyVisible ? '' : 'none';
+        });
+      });
+    });
+  }
+  // Liquid glass -- cursor-reactive specular highlight
+  document.querySelectorAll('.liquid-glass').forEach(function (el) {
+    el.addEventListener('mousemove', function (e) {
+      var rect = el.getBoundingClientRect();
+      var x = ((e.clientX - rect.left) / rect.width) * 100;
+      var y = ((e.clientY - rect.top) / rect.height) * 100;
+      el.style.setProperty('--mx', x + '%');
+      el.style.setProperty('--my', y + '%');
+    });
+  });
+
+  // Card tilt-on-hover -- subtle 3D tilt that tracks the cursor
+  var tiltEls = document.querySelectorAll('.feature-card, .testi-card, .value-card');
+  var isTouch = window.matchMedia ? window.matchMedia('(hover: none), (pointer: coarse)').matches : ('ontouchstart' in window);
+  if (!isTouch) {
+    tiltEls.forEach(function (el) {
+      el.style.transformStyle = 'preserve-3d';
+      el.addEventListener('mousemove', function (e) {
+        var rect = el.getBoundingClientRect();
+        var px = (e.clientX - rect.left) / rect.width - 0.5;
+        var py = (e.clientY - rect.top) / rect.height - 0.5;
+        var rotateX = (-py * 6).toFixed(2);
+        var rotateY = (px * 6).toFixed(2);
+        el.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-3px)';
+      });
+      el.addEventListener('mouseleave', function () {
+        el.style.transform = '';
+      });
+    });
+  }
+
+  // Adaptive nav -- glass intensifies once the page is scrolled
+  var header = document.querySelector('.site-header');
+  if (header) {
+    var setHeaderState = function () {
+      header.classList.toggle('is-scrolled', window.scrollY > 12);
+    };
+    setHeaderState();
+    window.addEventListener('scroll', setHeaderState, { passive: true });
+  }
+
 });</script>
 <script src="script.js"></script>
 </body>
