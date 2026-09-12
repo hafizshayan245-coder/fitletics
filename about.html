@@ -123,12 +123,24 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.faq-item').forEach(function (item) {
     var q = item.querySelector('.faq-q');
     if (!q) return;
-    q.addEventListener('click', function () {
+    var toggle = function () {
       var wasOpen = item.classList.contains('open');
       document.querySelectorAll('.faq-item.open').forEach(function (i) {
         i.classList.remove('open');
+        var iq = i.querySelector('.faq-q');
+        if (iq) iq.setAttribute('aria-expanded', 'false');
       });
-      if (!wasOpen) item.classList.add('open');
+      if (!wasOpen) {
+        item.classList.add('open');
+        q.setAttribute('aria-expanded', 'true');
+      }
+    };
+    q.addEventListener('click', toggle);
+    q.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        toggle();
+      }
     });
   });
 
@@ -181,7 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Card tilt-on-hover -- subtle 3D tilt that tracks the cursor
   var tiltEls = document.querySelectorAll('.feature-card, .testi-card, .value-card');
   var isTouch = window.matchMedia ? window.matchMedia('(hover: none), (pointer: coarse)').matches : ('ontouchstart' in window);
-  if (!isTouch) {
+  var prefersReducedMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+  if (!isTouch && !prefersReducedMotion) {
     tiltEls.forEach(function (el) {
       el.style.transformStyle = 'preserve-3d';
       el.addEventListener('mousemove', function (e) {

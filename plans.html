@@ -184,15 +184,15 @@
     </div>
     <div class="faq">
       <div class="faq-item open">
-        <div class="faq-q"><span>How do I get my plan after purchase?</span><span class="plus">+</span></div>
+        <div class="faq-q" role="button" tabindex="0" aria-expanded="true"><span>How do I get my plan after purchase?</span><span class="plus">+</span></div>
         <div class="faq-a"><p>Every FitLetics program is delivered digitally through Whop. As soon as checkout is complete, your plan unlocks instantly inside your Whop account — no waiting, no email delays.</p></div>
       </div>
       <div class="faq-item">
-        <div class="faq-q"><span>Do I need a gym membership?</span><span class="plus">+</span></div>
+        <div class="faq-q" role="button" tabindex="0" aria-expanded="false"><span>Do I need a gym membership?</span><span class="plus">+</span></div>
         <div class="faq-a"><p>No. Every plan includes equipment substitutions for home gyms, commercial gyms, and minimal-equipment setups.</p></div>
       </div>
       <div class="faq-item">
-        <div class="faq-q"><span>Can I run more than one plan at a time?</span><span class="plus">+</span></div>
+        <div class="faq-q" role="button" tabindex="0" aria-expanded="false"><span>Can I run more than one plan at a time?</span><span class="plus">+</span></div>
         <div class="faq-a"><p>The Fuel Blueprint is designed to run alongside any training plan. Training programs themselves are best run one at a time, in sequence, so your body actually adapts.</p></div>
       </div>
     </div>
@@ -261,12 +261,24 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.faq-item').forEach(function (item) {
     var q = item.querySelector('.faq-q');
     if (!q) return;
-    q.addEventListener('click', function () {
+    var toggle = function () {
       var wasOpen = item.classList.contains('open');
       document.querySelectorAll('.faq-item.open').forEach(function (i) {
         i.classList.remove('open');
+        var iq = i.querySelector('.faq-q');
+        if (iq) iq.setAttribute('aria-expanded', 'false');
       });
-      if (!wasOpen) item.classList.add('open');
+      if (!wasOpen) {
+        item.classList.add('open');
+        q.setAttribute('aria-expanded', 'true');
+      }
+    };
+    q.addEventListener('click', toggle);
+    q.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        toggle();
+      }
     });
   });
 
@@ -342,7 +354,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Card tilt-on-hover -- subtle 3D tilt that tracks the cursor
   var tiltEls = document.querySelectorAll('.feature-card, .testi-card, .value-card');
   var isTouch = window.matchMedia ? window.matchMedia('(hover: none), (pointer: coarse)').matches : ('ontouchstart' in window);
-  if (!isTouch) {
+  var prefersReducedMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+  if (!isTouch && !prefersReducedMotion) {
     tiltEls.forEach(function (el) {
       el.style.transformStyle = 'preserve-3d';
       el.addEventListener('mousemove', function (e) {

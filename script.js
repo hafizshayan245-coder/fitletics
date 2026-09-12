@@ -12,10 +12,24 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.faq-item').forEach((item) => {
     const q = item.querySelector('.faq-q');
     if (!q) return;
-    q.addEventListener('click', () => {
+    const toggle = () => {
       const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach((i) => i.classList.remove('open'));
-      if (!wasOpen) item.classList.add('open');
+      document.querySelectorAll('.faq-item.open').forEach((i) => {
+        i.classList.remove('open');
+        const iq = i.querySelector('.faq-q');
+        if (iq) iq.setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) {
+        item.classList.add('open');
+        q.setAttribute('aria-expanded', 'true');
+      }
+    };
+    q.addEventListener('click', toggle);
+    q.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        toggle();
+      }
     });
   });
 
@@ -92,7 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Card tilt-on-hover — subtle 3D tilt that tracks the cursor
   const tiltEls = document.querySelectorAll('.feature-card, .testi-card, .value-card');
   const isTouch = window.matchMedia ? window.matchMedia('(hover: none), (pointer: coarse)').matches : ('ontouchstart' in window);
-  if (!isTouch) {
+  const prefersReducedMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+  if (!isTouch && !prefersReducedMotion) {
     tiltEls.forEach((el) => {
       el.style.transformStyle = 'preserve-3d';
       el.addEventListener('mousemove', (e) => {
