@@ -118,11 +118,32 @@
       <a href="mailto:hellofitletics@gmail.com" class="btn btn-outline btn-sm">Contact Us</a>
       <a href="https://whop.com/fitletics" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Shop on Whop</a>
     </div>
-    <button class="nav-toggle" aria-label="Toggle menu">
+    <button class="nav-toggle" aria-label="Toggle menu" aria-haspopup="dialog" aria-controls="sideMenu">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
+
+<div class="side-menu-overlay" id="sideMenuOverlay" aria-hidden="true">
+  <aside class="side-menu" id="sideMenu" role="dialog" aria-modal="true" aria-label="Site menu">
+    <div class="side-menu-head">
+      <a href="index.html" class="nav-logo" style="font-family:var(--font-display);font-weight:700;font-size:18px;color:var(--ink);">FitLetics</a>
+      <button class="side-menu-close" id="sideMenuClose" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="side-menu-links">
+      <a href="index.html">Home</a>
+      <a href="plans.html" class="active">Plans</a>
+      <a href="about.html">About</a>
+      <a href="#faq">FAQs</a>
+      <a href="mailto:hellofitletics@gmail.com">Contact</a>
+    </nav>
+    <div class="side-menu-foot">
+      <a href="https://whop.com/fitletics" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Shop on Whop</a>
+    </div>
+  </aside>
+</div>
 
 <section class="plans-hero">
   <div class="wrap">
@@ -173,7 +194,7 @@
         </div>
       </div>
 
-      <div class="feature-card" data-category="Conditioning">
+      <div class="feature-card" data-category="Conditioning" data-modal-image="images/fat-loss-accelerator.jpg" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View details for Fat Loss Accelerator">
         <div class="feature-card-top">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
@@ -195,7 +216,7 @@
         </div>
       </div>
 
-      <div class="feature-card" data-category="Nutrition">
+      <div class="feature-card" data-category="Nutrition" data-modal-image="images/master-your-macros.jpg" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View details for Master Your Macros">
         <div class="feature-card-top">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -341,8 +362,58 @@
   </div>
 </footer>
 
+<div class="plan-modal-overlay" id="planModalOverlay" aria-hidden="true">
+  <div class="plan-modal" role="dialog" aria-modal="true" aria-labelledby="planModalTitle">
+    <button class="plan-modal-close" id="planModalClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="plan-modal-media">
+      <img id="planModalImage" src="" alt="">
+    </div>
+    <div class="plan-modal-body">
+      <span class="tag" id="planModalTag"></span>
+      <h3 id="planModalTitle"></h3>
+      <p id="planModalDesc"></p>
+      <ul class="feature-list" id="planModalFeatures"></ul>
+      <div class="feature-card-foot" id="planModalFoot">
+        <div class="price" id="planModalPrice"></div>
+        <a id="planModalLink" href="#" target="_blank" rel="noopener">Get on
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01-1.87-1.87-4.36-2.9-7.01-2.91zm0 18.14c-1.5 0-2.98-.4-4.27-1.16l-.31-.18-3.18.83.85-3.1-.2-.32a8.19 8.19 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.78.96-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42-.14-.01-.31-.01-.47-.01-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.21.88 2.38 1 2.54.12.17 1.73 2.64 4.2 3.7.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  // Side menu — hamburger opens a drawer with all page links (mobile + desktop)
+  var sideMenuOverlay = document.getElementById("sideMenuOverlay");
+  var navToggleBtn = document.querySelector(".nav-toggle");
+  if (sideMenuOverlay && navToggleBtn && !sideMenuOverlay.dataset.bound) {
+    sideMenuOverlay.dataset.bound = "true";
+    var sideMenuClose = document.getElementById("sideMenuClose");
+    var openSideMenu = function () {
+      sideMenuOverlay.classList.add("open");
+      sideMenuOverlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("menu-open");
+    };
+    var closeSideMenu = function () {
+      sideMenuOverlay.classList.remove("open");
+      sideMenuOverlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("menu-open");
+    };
+    navToggleBtn.addEventListener("click", openSideMenu);
+    if (sideMenuClose) sideMenuClose.addEventListener("click", closeSideMenu);
+    sideMenuOverlay.addEventListener("click", function (e) {
+      if (e.target === sideMenuOverlay) closeSideMenu();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && sideMenuOverlay.classList.contains("open")) closeSideMenu();
+    });
+  }
+
   var toggle = document.querySelector('.nav-toggle');
   var links = document.querySelector('.nav-links');
   if (toggle && links) {
@@ -432,6 +503,81 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+  // Plan detail modal -- click a plan card to open a big box with
+  // its picture, full description, and details.
+  var planCards = document.querySelectorAll('.feature-card[data-modal-image]');
+  var modalOverlay = document.getElementById('planModalOverlay');
+  if (planCards.length && modalOverlay) {
+    var modalImage = document.getElementById('planModalImage');
+    var modalTag = document.getElementById('planModalTag');
+    var modalTitle = document.getElementById('planModalTitle');
+    var modalDesc = document.getElementById('planModalDesc');
+    var modalFeatures = document.getElementById('planModalFeatures');
+    var modalPrice = document.getElementById('planModalPrice');
+    var modalLink = document.getElementById('planModalLink');
+    var modalClose = document.getElementById('planModalClose');
+    var lastFocused = null;
+
+    var openModal = function (card) {
+      var title = card.querySelector('h3');
+      var desc = card.querySelector('p');
+      var tag = card.querySelector('.tag');
+      var features = card.querySelector('.feature-list');
+      var price = card.querySelector('.price');
+      var link = card.querySelector('.feature-card-foot a');
+      var image = card.getAttribute('data-modal-image');
+
+      modalImage.src = image;
+      modalImage.alt = title ? title.textContent : '';
+      modalTitle.textContent = title ? title.textContent : '';
+      modalDesc.textContent = desc ? desc.textContent : '';
+      modalFeatures.innerHTML = features ? features.innerHTML : '';
+      modalPrice.innerHTML = price ? price.innerHTML : '';
+      if (tag) {
+        modalTag.textContent = tag.textContent;
+        modalTag.className = tag.className;
+        modalTag.hidden = false;
+      } else {
+        modalTag.hidden = true;
+      }
+      if (link) modalLink.href = link.href;
+
+      lastFocused = document.activeElement;
+      modalOverlay.classList.add('open');
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      modalClose.focus();
+    };
+
+    var closeModal = function () {
+      modalOverlay.classList.remove('open');
+      modalOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    };
+
+    planCards.forEach(function (card) {
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('a')) return;
+        openModal(card);
+      });
+      card.addEventListener('keydown', function (e) {
+        if ((e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') && e.target === card) {
+          e.preventDefault();
+          openModal(card);
+        }
+      });
+    });
+
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', function (e) {
+      if (e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('open')) closeModal();
+    });
+  }
+
   // Liquid glass -- cursor-reactive specular highlight
   document.querySelectorAll('.liquid-glass').forEach(function (el) {
     el.addEventListener('mousemove', function (e) {

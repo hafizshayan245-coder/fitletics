@@ -1,4 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Side menu — hamburger opens a drawer with all page links (mobile + desktop)
+  const sideMenuOverlay = document.getElementById('sideMenuOverlay');
+  const navToggleBtn = document.querySelector('.nav-toggle');
+  if (sideMenuOverlay && navToggleBtn && !sideMenuOverlay.dataset.bound) {
+    sideMenuOverlay.dataset.bound = 'true';
+    const sideMenuClose = document.getElementById('sideMenuClose');
+    const openSideMenu = () => {
+      sideMenuOverlay.classList.add('open');
+      sideMenuOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('menu-open');
+    };
+    const closeSideMenu = () => {
+      sideMenuOverlay.classList.remove('open');
+      sideMenuOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('menu-open');
+    };
+    navToggleBtn.addEventListener('click', openSideMenu);
+    if (sideMenuClose) sideMenuClose.addEventListener('click', closeSideMenu);
+    sideMenuOverlay.addEventListener('click', (e) => {
+      if (e.target === sideMenuOverlay) closeSideMenu();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sideMenuOverlay.classList.contains('open')) closeSideMenu();
+    });
+  }
+
   // Mobile nav toggle
   const toggle = document.querySelector('.nav-toggle');
   const links = document.querySelector('.nav-links');
@@ -89,6 +115,82 @@ document.addEventListener('DOMContentLoaded', () => {
           grid.style.display = anyVisible ? '' : 'none';
         });
       });
+    });
+  }
+
+  // Plan detail modal — click a plan card to open a big box with
+  // its picture, full description, and details. Only cards that
+  // carry a data-modal-image attribute participate.
+  const planCards = document.querySelectorAll('.feature-card[data-modal-image]');
+  const modalOverlay = document.getElementById('planModalOverlay');
+  if (planCards.length && modalOverlay) {
+    const modalImage = document.getElementById('planModalImage');
+    const modalTag = document.getElementById('planModalTag');
+    const modalTitle = document.getElementById('planModalTitle');
+    const modalDesc = document.getElementById('planModalDesc');
+    const modalFeatures = document.getElementById('planModalFeatures');
+    const modalPrice = document.getElementById('planModalPrice');
+    const modalLink = document.getElementById('planModalLink');
+    const modalClose = document.getElementById('planModalClose');
+    let lastFocused = null;
+
+    const openModal = (card) => {
+      const title = card.querySelector('h3');
+      const desc = card.querySelector('p');
+      const tag = card.querySelector('.tag');
+      const features = card.querySelector('.feature-list');
+      const price = card.querySelector('.price');
+      const link = card.querySelector('.feature-card-foot a');
+      const image = card.getAttribute('data-modal-image');
+
+      modalImage.src = image;
+      modalImage.alt = title ? title.textContent : '';
+      modalTitle.textContent = title ? title.textContent : '';
+      modalDesc.textContent = desc ? desc.textContent : '';
+      modalFeatures.innerHTML = features ? features.innerHTML : '';
+      modalPrice.innerHTML = price ? price.innerHTML : '';
+      if (tag) {
+        modalTag.textContent = tag.textContent;
+        modalTag.className = tag.className;
+        modalTag.hidden = false;
+      } else {
+        modalTag.hidden = true;
+      }
+      if (link) modalLink.href = link.href;
+
+      lastFocused = document.activeElement;
+      modalOverlay.classList.add('open');
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      modalClose.focus();
+    };
+
+    const closeModal = () => {
+      modalOverlay.classList.remove('open');
+      modalOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    };
+
+    planCards.forEach((card) => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a')) return; // let the WhatsApp link work as normal
+        openModal(card);
+      });
+      card.addEventListener('keydown', (e) => {
+        if ((e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') && e.target === card) {
+          e.preventDefault();
+          openModal(card);
+        }
+      });
+    });
+
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('open')) closeModal();
     });
   }
 

@@ -26,11 +26,32 @@
       <a href="mailto:hellofitletics@gmail.com" class="btn btn-outline btn-sm">Contact Us</a>
       <a href="https://whop.com/fitletics" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Shop on Whop</a>
     </div>
-    <button class="nav-toggle" aria-label="Toggle menu">
+    <button class="nav-toggle" aria-label="Toggle menu" aria-haspopup="dialog" aria-controls="sideMenu">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
+
+<div class="side-menu-overlay" id="sideMenuOverlay" aria-hidden="true">
+  <aside class="side-menu" id="sideMenu" role="dialog" aria-modal="true" aria-label="Site menu">
+    <div class="side-menu-head">
+      <a href="index.html" class="nav-logo" style="font-family:var(--font-display);font-weight:700;font-size:18px;color:var(--ink);">FitLetics</a>
+      <button class="side-menu-close" id="sideMenuClose" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="side-menu-links">
+      <a href="index.html">Home</a>
+      <a href="plans.html">Plans</a>
+      <a href="about.html">About</a>
+      <a href="plans.html#faq">FAQs</a>
+      <a href="mailto:hellofitletics@gmail.com">Contact</a>
+    </nav>
+    <div class="side-menu-foot">
+      <a href="https://whop.com/fitletics" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Shop on Whop</a>
+    </div>
+  </aside>
+</div>
 
 <section class="hero-v2" style="min-height:60vh; display:flex; align-items:center;">
   <div class="wrap">
@@ -89,6 +110,32 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  // Side menu — hamburger opens a drawer with all page links (mobile + desktop)
+  var sideMenuOverlay = document.getElementById("sideMenuOverlay");
+  var navToggleBtn = document.querySelector(".nav-toggle");
+  if (sideMenuOverlay && navToggleBtn && !sideMenuOverlay.dataset.bound) {
+    sideMenuOverlay.dataset.bound = "true";
+    var sideMenuClose = document.getElementById("sideMenuClose");
+    var openSideMenu = function () {
+      sideMenuOverlay.classList.add("open");
+      sideMenuOverlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("menu-open");
+    };
+    var closeSideMenu = function () {
+      sideMenuOverlay.classList.remove("open");
+      sideMenuOverlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("menu-open");
+    };
+    navToggleBtn.addEventListener("click", openSideMenu);
+    if (sideMenuClose) sideMenuClose.addEventListener("click", closeSideMenu);
+    sideMenuOverlay.addEventListener("click", function (e) {
+      if (e.target === sideMenuOverlay) closeSideMenu();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && sideMenuOverlay.classList.contains("open")) closeSideMenu();
+    });
+  }
+
   var toggle = document.querySelector('.nav-toggle');
   var links = document.querySelector('.nav-links');
   if (toggle && links) {

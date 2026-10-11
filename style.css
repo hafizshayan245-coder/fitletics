@@ -197,7 +197,7 @@ h1,h2,h3,h4{
 .nav-cta{ display:flex; align-items:center; gap:12px; }
 
 .nav-toggle{
-  display:none;
+  display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
@@ -209,7 +209,93 @@ h1,h2,h3,h4{
   height: 44px;
   padding:0;
 }
-.nav-toggle span{ width:22px; height:2px; background: var(--ink); }
+.nav-toggle span{ width:22px; height:2px; background: var(--ink); transition: transform .2s ease, opacity .2s ease; }
+
+/* =========================================================
+   Side menu — hamburger-triggered drawer, mobile + desktop
+   ========================================================= */
+body.menu-open{ overflow:hidden; }
+
+.side-menu-overlay{
+  position:fixed;
+  inset:0;
+  z-index: 400;
+  background: rgba(20,24,28,0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity:0;
+  visibility:hidden;
+  transition: opacity .25s ease, visibility 0s linear .25s;
+}
+.side-menu-overlay.open{
+  opacity:1;
+  visibility:visible;
+  transition: opacity .25s ease, visibility 0s linear 0s;
+}
+
+.side-menu{
+  position:fixed;
+  top:0; right:0;
+  height:100%;
+  width: min(340px, 86vw);
+  background: var(--white);
+  border-left: 1px solid var(--line);
+  box-shadow: -18px 0 48px rgba(20,24,28,0.25);
+  display:flex;
+  flex-direction:column;
+  transform: translateX(100%);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.side-menu-overlay.open .side-menu{ transform:none; }
+
+.side-menu-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.side-menu-head img{ height:30px; width:auto; }
+.side-menu-close{
+  width: 38px; height: 38px;
+  display:flex; align-items:center; justify-content:center;
+  background:none;
+  border:1px solid var(--line);
+  color: var(--ink);
+  cursor:pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.side-menu-close:hover{ background: var(--ink); color: var(--white); border-color: var(--ink); }
+.side-menu-close svg{ width:18px; height:18px; }
+
+.side-menu-links{
+  display:flex;
+  flex-direction:column;
+  padding: 8px 0;
+  overflow-y:auto;
+}
+.side-menu-links a{
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--graphite);
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line);
+  transition: color .15s ease, background .15s ease, padding-left .15s ease;
+}
+.side-menu-links a:hover, .side-menu-links a.active{
+  color: var(--ink);
+  background: var(--paper-2);
+  padding-left: 28px;
+}
+.side-menu-links a.active{ color: var(--cyan-deep); }
+
+.side-menu-foot{ margin-top:auto; padding: 18px 20px; border-top: 1px solid var(--line); }
+.side-menu-foot .btn{ width:100%; text-align:center; justify-content:center; }
+
+@media (max-width: 420px){
+  .side-menu{ width: 100vw; }
+}
 
 /* =========================================================
    Hero (blueprint grid backdrop, left-aligned)
@@ -950,4 +1036,101 @@ footer{
 a:focus-visible, button:focus-visible, [role="button"]:focus-visible{
   outline: 2px solid var(--cyan-deep);
   outline-offset: 3px;
+}
+
+/* =========================================================
+   Plan cards that open a detail modal
+   ========================================================= */
+.feature-card[data-modal-image]{ cursor: pointer; }
+
+/* =========================================================
+   Plan detail modal
+   ========================================================= */
+body.modal-open{ overflow: hidden; }
+
+.plan-modal-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(20,24,28,0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s ease, visibility 0s linear .25s;
+}
+.plan-modal-overlay.open{
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .25s ease, visibility 0s linear 0s;
+}
+
+.plan-modal{
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--white);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 64px rgba(20,24,28,0.35);
+  transform: translateY(16px) scale(.98);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.plan-modal-overlay.open .plan-modal{ transform: none; }
+
+.plan-modal-close{
+  position: absolute;
+  top: 14px; right: 14px;
+  z-index: 2;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.plan-modal-close:hover{ background: var(--ink); color: var(--white); border-color: var(--ink); }
+.plan-modal-close svg{ width: 18px; height: 18px; }
+
+.plan-modal-media{
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--paper-2);
+  overflow: hidden;
+}
+.plan-modal-media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.plan-modal-body{ padding: 32px 32px 36px; }
+.plan-modal-body .tag{ margin-bottom: 14px; }
+.plan-modal-body h3{
+  font-size: clamp(24px, 3.4vw, 32px);
+  margin-bottom: 12px;
+}
+.plan-modal-body > p{
+  color: var(--steel);
+  font-size: 15.5px;
+  margin-bottom: 22px;
+}
+.plan-modal-body .feature-list{ margin-bottom: 26px; }
+.plan-modal-body .feature-card-foot{
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+
+@media (max-width: 640px){
+  .plan-modal-overlay{ padding: 0; align-items: flex-end; }
+  .plan-modal{ max-width: 100%; max-height: 92vh; }
+  .plan-modal-body{ padding: 26px 22px 28px; }
 }
