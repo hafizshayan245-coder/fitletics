@@ -477,6 +477,25 @@ section{ padding: 76px 0; }
 .tag-green{ background: var(--green-pale); color:#1F6B49; border-color: rgba(47,143,99,0.25); }
 .tag-violet{ background: var(--violet-pale); color:#4E4590; border-color: rgba(110,99,182,0.25); }
 
+.feature-card-image{
+  margin: -28px -24px 0;
+  aspect-ratio: 9 / 8;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+.feature-card-image img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform .3s ease;
+}
+.feature-card:hover .feature-card-image img{ transform: scale(1.04); }
+
+/* Per-plan image zoom — tweak the scale value to zoom a specific plan's cover in/out */
+.feature-card[data-modal-image="images/master-your-macros.jpg"] .feature-card-image img{ transform: scale(1.06); }
+.feature-card[data-modal-image="images/master-your-macros.jpg"]:hover .feature-card-image img{ transform: scale(1.1); }
 .feature-card h3{ font-size: 20px; }
 .feature-card > p{ color: var(--steel); font-size: 14px; margin-top:-6px; }
 .feature-list{ display:flex; flex-direction:column; gap:9px; }
@@ -765,6 +784,7 @@ footer{
   .plans-hero{ padding: 40px 0 12px; }
 
   .feature-card{ padding: 22px; }
+  .feature-card-image{ margin: -22px -22px 0; aspect-ratio: 9 / 8; }
   .feature-card-foot{
     flex-direction: column;
     align-items: flex-start;
